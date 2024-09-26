@@ -23,23 +23,15 @@ function App() {
     },
   });
 
-  if (isLoading) return null;
+
+  if (isLoading) return null;  //para que no demore el spiner y cargue rapido al "/"
 
   return (
     <Layout>
       <Routes>
-        <Route
-          path="/"
-          element={authUser ? <HomePage /> : <Navigate to={"/login"} />}
-        />
-        <Route
-          path="/signup"
-          element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
-        />
-        <Route
-          path="/login"
-          element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
-        />
+        <Route path="/" element={authUser ? <HomePage /> : <Navigate to={"/login"} />}/>
+        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}/>
+        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}/>
       </Routes>
       <Toaster />
     </Layout>

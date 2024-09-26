@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { axiosInstance } from "../../lib/axios";
 import {Loader} from "lucide-react"
@@ -8,6 +8,7 @@ const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const queryClient = useQueryClient();
 
   const { mutate: signUpMutation, isLoading } = useMutation({
     mutationFn: async (data) => {
