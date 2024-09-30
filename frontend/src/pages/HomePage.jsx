@@ -27,7 +27,7 @@ const HomePage = () => {
 
 	
 	return (
-		<div className='mt-6 grid grid-cols-1 lg:grid-cols-4 gap-6'>
+		<div className='grid grid-cols-1 lg:grid-cols-4 gap-6'>
 			<div className='hidden lg:block lg:col-span-1'>
 				<Sidebar user={authUser} />
 			</div>
