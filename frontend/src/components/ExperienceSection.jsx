@@ -141,7 +141,7 @@ const ExperienceSection = ({ userData, isOwnProfile, onSave }) => {
 							onClick={() => setIsEditing(true)}
 							className='mt-4 text-primary hover:text-primary-dark transition duration-300'
 						>
-							<span className="flex items-center gap-2">Edit Experiences<BriefcaseBusiness size={16} /></span> 
+							<span className="flex items-center gap-2">Edit Experiences<BriefcaseBusiness size={20} /></span> 
 						</button>
 					)}
 				</>

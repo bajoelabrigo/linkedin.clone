@@ -37,7 +37,7 @@ const AboutSection = ({ userData, isOwnProfile, onSave }) => {
                 onClick={() => setIsEditing(true)}
                 className="mt-2 text-primary hover:text-primary-dark transition duration-300"
               >
-                <div className="flex items-center gap-2">Edit <UserRoundPen size={16} className="mr-1" /></div> 
+                <div className="flex items-center gap-2">Edit <UserRoundPen size={20} className="mr-1" /></div> 
               </button>
             </>
           )}
