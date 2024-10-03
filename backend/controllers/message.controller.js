@@ -1,5 +1,5 @@
-import Conversation from "../models/conversationModel.js";
-import Message from "../models/messageModel.js";
+import Conversation from "../models/conversation.model.js";
+import Message from "../models/message.model.js";
 import { getRecipientSocketId, io } from "../socket/socket.js";
 import { v2 as cloudinary } from "cloudinary";
 
@@ -84,7 +84,7 @@ async function getConversations(req, res) {
 	try {
 		const conversations = await Conversation.find({ participants: userId }).populate({
 			path: "participants",
-			select: "username profilePic",
+			select: "username profilePicture",
 		});
 
 		// remove the current user from the participants array

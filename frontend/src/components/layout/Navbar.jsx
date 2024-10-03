@@ -85,7 +85,7 @@ const Navbar = () => {
                   )}
                 </Link>
                 <Link
-                  to="/notifications"
+                  to="/chat"
                   className="text-neutral flex flex-col items-center relative"
                 >
                   <MessageSquare size={20} />

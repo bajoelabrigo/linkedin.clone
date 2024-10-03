@@ -10,6 +10,7 @@ import NotificationsPage from "./pages/NotificationPage";
 import NetworkPage from "./pages/NetworkPage";
 import PostPage from "./pages/PostPage";
 import ProfilePage from "./pages/ProfilePage";
+import ChatPage from "./pages/ChatPage";
 
 
 
@@ -42,6 +43,7 @@ function App() {
         <Route path='/network' element={authUser ? <NetworkPage /> : <Navigate to={"/login"} />} />
         <Route path='/post/:postId' element={authUser ? <PostPage /> : <Navigate to={"/login"} />} />
         <Route path='/profile/:username' element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />} />
+        <Route path='/chat' element={authUser ? <ChatPage /> : <Navigate to={"/login"} />} />
         
       </Routes>
       <Toaster />

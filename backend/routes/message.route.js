@@ -1,5 +1,5 @@
 import express from "express";
-import protectRoute from "../middlewares/protectRoute.js";
+import { protectRoute } from "../middleware/auth.middleware.js";
 import { getConversations, getMessages, sendMessage } from "../controllers/message.controller.js";
 
 
