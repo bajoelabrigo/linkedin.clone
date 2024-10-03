@@ -127,9 +127,7 @@ const ChatPage = () => {
                 </Text>
               </Flex>
             )}
-            {selectedConversation._id && (
-              <MessageContainer />
-            )}
+            {selectedConversation._id && <MessageContainer />}
           </Flex>
         </div>
       </div>
