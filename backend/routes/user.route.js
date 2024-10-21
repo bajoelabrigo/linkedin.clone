@@ -9,8 +9,8 @@ import {
 
 const router = express.Router();
 
+router.get("/profile/:username", getUserProfile);
 router.get("/suggestions", protectRoute, getSuggestedConnections);
-router.get("/profile/:query", getUserProfile);
 router.get("/:username", protectRoute, getPublicProfile);
 
 router.put("/profile", protectRoute, updateProfile);

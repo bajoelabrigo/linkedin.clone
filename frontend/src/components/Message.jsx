@@ -1,22 +1,29 @@
 import { Avatar, Flex, Text } from "@chakra-ui/react";
+import { useRecoilState } from "recoil";
+import { selectedConversationAtom } from "../atoms/messagesAtom";
+import { useQuery } from "@tanstack/react-query";
+const Message = ({ ownMessage, message }) => {
+  const [selectedConversation, setSelectedConversation] = useRecoilState(
+    selectedConversationAtom
+  );
+  const { data: authuser } = useQuery({ queryKey: ["authUser"] });
 
-const Message = ({ ownMessage }) => {
+  //console.log(message.text);
+
   return (
     <>
       {ownMessage ? (
         <Flex gap={2} alignSelf={"flex-end"}>
           <Text maxW={"350px"} bg={"blue.100"} p={1} borderRadius={"md"}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. 
+            {message.text}
           </Text>
-          <Avatar src="" w="7" h={7} />
+          <Avatar src={authuser?.profilePicture} w="7" h={7} />
         </Flex>
       ) : (
         <Flex gap={2}>
-          <Avatar src="" w="7" h={7} />
+          <Avatar src={selectedConversation.userProfilePicture} w="7" h={7} />
           <Text maxW={"350px"} bg={"gray.100"} p={1} borderRadius={"md"}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
+            {message.text}
           </Text>
         </Flex>
       )}

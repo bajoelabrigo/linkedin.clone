@@ -7,7 +7,6 @@ import {
   Stack,
   Text,
   WrapItem,
-  useColorMode,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
@@ -19,12 +18,14 @@ import { selectedConversationAtom } from "../atoms/messagesAtom";
 const Conversation = ({ conversation }) => {
   const user = conversation.participants[0];
   const { data: authuser } = useQuery({ queryKey: ["authUser"] });
+
   const lastMessage = conversation.lastMessage;
+  
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
   );
 
-  //console.log(selectedConversation);
+  //console.log(conversation);
 
   return (
     <Flex
@@ -33,6 +34,8 @@ const Conversation = ({ conversation }) => {
       p={"1"}
       _hover={{
         cursor: "pointer",
+        bg: useColorModeValue("blue.700"),
+        color: "white",
       }}
       onClick={() => {
         setSelectedConversation({
@@ -64,7 +67,7 @@ const Conversation = ({ conversation }) => {
         </Text>
         <Text fontSize={"xs"} display={"flex"} alignItems={"center"} gap={1}>
           {authuser._id === lastMessage.sender ? <BsCheck2All size={16} /> : ""}
-          {lastMessage.text.length > 18
+          {lastMessage?.text?.length > 18
             ? lastMessage.text.substring(0, 18) + "..."
             : lastMessage.text || <BsFillImageFill />}
         </Text>

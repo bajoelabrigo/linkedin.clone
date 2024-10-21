@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
 import RecommendedUser from "../components/RecommendedUser";
 import {
@@ -14,17 +14,27 @@ import {
 import { SearchIcon } from "lucide-react";
 import Conversation from "../components/Conversation";
 import MessageContainer from "../components/MessageContainer";
-import toast from "react-hot-toast";
 import { GiConversation } from "react-icons/gi";
-import { selectedConversationAtom } from "../atoms/messagesAtom";
+
+import {
+  conversationsAtom,
+  selectedConversationAtom,
+} from "../atoms/messagesAtom";
 import { useRecoilState } from "recoil";
 
+import { useState } from "react";
+
 const ChatPage = () => {
-  const { data: user } = useQuery({ queryKey: ["authUser"] });
+  const { data: currentUser } = useQuery({ queryKey: ["authUser"] });
+
+  const [searchText, setSearchText] = useState("");
+
+  const queryClient = useQueryClient();
 
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
   );
+  const [conversations, setConversations] = useRecoilState(conversationsAtom);
 
   const { data: recommendedUsers } = useQuery({
     queryKey: ["recommendedUsers"],
@@ -40,11 +50,85 @@ const ChatPage = () => {
       const res = await axiosInstance.get("/messages/conversations");
       return res.data;
     },
-    onError: (error) => {
-      toast.error("Error", error.message, "error");
+  });
+
+  const { data: searchingUsers, isLoading: isLoadingsearchingUser } = useQuery({
+    queryKey: ["searchingUsers", searchText],
+    queryFn: async () => {
+      try {
+        const res = await axiosInstance.get(`/users/profile/${searchText}`);
+        const searchingUser = await res.data;
+        if (searchingUser.error) {
+          toast.error("Error", searchingUser.error, "error");
+          return;
+        }
+        const messagingYourself = searchingUser._id === currentUser._id;
+        if (messagingYourself) {
+          toast.error("Error", "You can't message yourself", "error");
+          return;
+        }
+        const conversationAlreadyExist = getConversations.find(
+          (conversation) =>
+            conversation.participants[0]._id === searchingUser._id
+        );
+        if (conversationAlreadyExist) {
+          setSelectedConversation({
+            _id: conversationAlreadyExist._id,
+            userId: searchingUser._id,
+            username: searchingUser.username,
+            userProfilePicture: searchingUser.profilePicture,
+          });
+          return;
+        }
+
+        const mockConversation = {
+          mock: true,
+          lastMessage: {
+            text: "",
+            sender: "",
+          },
+          _id: Date.now(),
+          participants: [
+            {
+              _id: searchedUser._id,
+              username: searchedUser.username,
+              profilePicture: searchedUser.profilePicture,
+            },
+          ],
+        };
+        setConversations((prevConvs) => [...prevConvs, mockConversation]);
+      } catch (error) {
+        toast.error(err.response.data.message || "Something went wrong");
+      }
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries(["getConversations"]);
+    },
+
+    onError: (err) => {
+      toast.error(err.response.data.message || "Something went wrong");
+      if (err.response.data.message === "User not found") {
+        toast.error("User not found", "error");
+      }
     },
   });
-  //console.log(getConversations)
+
+  const handleConversationSearch = async (e) => {
+    e.preventDefault();
+    searchingUsers(searchText);
+    setSelectedConversation({...selectedConversation,
+      _id: getConversations._id,
+      userId: user?._id,
+      userProfilePicture: user?.profilePicture,
+      username: user?.username,
+    });
+    if (!searchingUsers(searchText)) {
+      searchText("");
+      setSearchText("");
+    }
+    if (searchingUsers) return null; //para que no demore el spiner y cargue rapido al "/"
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
       <div className="col-span-1 lg:col-span-3">
@@ -77,10 +161,18 @@ const ChatPage = () => {
               >
                 Your Conversations
               </Text>
-              <form>
+              <form onSubmit={handleConversationSearch}>
                 <Flex alignItems={"center"} gap={2}>
-                  <Input placeholder="Search for a user" />
-                  <Button size={"sm"}>
+                  <Input
+                    placeholder="Search for a user"
+                    onChange={(e) => setSearchText(e.target.value)}
+                  />
+                  <Button
+                    size={"sm"}
+                    onClick={handleConversationSearch}
+                    
+                  >
+                  {}
                     <SearchIcon />
                   </Button>
                 </Flex>
@@ -111,7 +203,7 @@ const ChatPage = () => {
                   />
                 ))}
             </Flex>
-            {!selectedConversation._id && (
+            {!selectedConversation?._id && (
               <Flex
                 flex={70}
                 borderRadius={"md"}

@@ -11,13 +11,18 @@ import Message from "./Message";
 import MessageInput from "./MessageInput";
 import { useRecoilState } from "recoil";
 import { selectedConversationAtom } from "../atoms/messagesAtom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../lib/axios";
+import { useState } from "react";
+import { m } from "framer-motion";
 
 const MessageContainer = () => {
   const [selectedConversation, setSelectedConversation] = useRecoilState(
     selectedConversationAtom
   );
+  const [messages, setMessages] = useState([]);
+  const { data: authuser } = useQuery({ queryKey: ["authUser"] });
+  const queryClient = useQueryClient();
 
   const { data: getMessages, isLoading: loadingMessages } = useQuery({
     queryKey: ["getMessages", selectedConversation.userId],
@@ -29,14 +34,13 @@ const MessageContainer = () => {
     },
   });
 
-  console.log("getMessages", getMessages);
-
   return (
     <Flex flex="70" borderRadius={"md"} p={2} flexDirection={"column"}>
       <Flex w={"full"} h={12} alignItems={"center"} gap={2}>
-        <Avatar src="" size={"sm"} />
+        <Avatar src={selectedConversation.userProfilePicture} size={"sm"} />
         <Text display={"flex"} alignItems={"center"}>
-          johndoe <Image src="/verified.png" w={4} h={4} ml={1} />
+          {selectedConversation.username}{" "}
+          <Image src="/verified.png" w={4} h={4} ml={1} />
         </Text>
       </Flex>
       <Divider />
@@ -49,8 +53,8 @@ const MessageContainer = () => {
         maxH={"400px"}
         overflowY={"auto"}
       >
-        {false &&
-          [...Array(5)].map((_, i) => (
+        {loadingMessages &&
+          [...Array(4)].map((_, i) => (
             <Flex
               key={i}
               gap={2}
@@ -69,17 +73,17 @@ const MessageContainer = () => {
             </Flex>
           ))}
 
-        <Message ownMessage={true} />
-        <Message ownMessage={false} />
-        <Message ownMessage={false} />
-        <Message ownMessage={true} />
-        <Message ownMessage={true} />
-        <Message ownMessage={false} />
-        <Message ownMessage={false} />
-        <Message ownMessage={true} />
+        {!loadingMessages &&
+          getMessages?.map((message) => (
+            <Message
+              key={message._id}
+              message={message}
+              ownMessage={authuser?._id === message.sender}
+            />
+          ))}
       </Flex>
 
-      <MessageInput />
+      <MessageInput setMessages={setMessages} />
     </Flex>
   );
 };
