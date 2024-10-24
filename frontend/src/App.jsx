@@ -12,14 +12,13 @@ import PostPage from "./pages/PostPage";
 import ProfilePage from "./pages/ProfilePage";
 import ChatPage from "./pages/ChatPage";
 
-
-
 function App() {
   const { data: authUser, isLoading } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
       try {
         const res = await axiosInstance.get("/auth/me");
+
         return res.data;
       } catch (err) {
         if (err.response && err.response.status === 401) {
@@ -30,21 +29,45 @@ function App() {
     },
   });
 
-
-  if (isLoading) return null;  //para que no demore el spiner y cargue rapido al "/"
+  if (isLoading) return null; //para que no demore el spiner y cargue rapido al "/"
 
   return (
     <Layout>
       <Routes>
-        <Route path="/" element={authUser ? <HomePage /> : <Navigate to={"/login"} />}/>
-        <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}/>
-        <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}/>
-        <Route path='/notifications' element={authUser ? <NotificationsPage /> : <Navigate to={"/login"} />} />
-        <Route path='/network' element={authUser ? <NetworkPage /> : <Navigate to={"/login"} />} />
-        <Route path='/post/:postId' element={authUser ? <PostPage /> : <Navigate to={"/login"} />} />
-        <Route path='/profile/:username' element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />} />
-        <Route path='/chat' element={authUser ? <ChatPage /> : <Navigate to={"/login"} />} />
-        
+        <Route
+          path="/"
+          element={authUser ? <HomePage /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/signup"
+          element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/login"
+          element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/notifications"
+          element={
+            authUser ? <NotificationsPage /> : <Navigate to={"/login"} />
+          }
+        />
+        <Route
+          path="/network"
+          element={authUser ? <NetworkPage /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/post/:postId"
+          element={authUser ? <PostPage /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/profile/:username"
+          element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/chat"
+          element={authUser ? <ChatPage /> : <Navigate to={"/login"} />}
+        />
       </Routes>
       <Toaster />
     </Layout>

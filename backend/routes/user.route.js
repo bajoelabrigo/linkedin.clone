@@ -5,6 +5,7 @@ import {
   getPublicProfile,
   updateProfile,
   getUserProfile,
+  getUsersForSidebar,
 } from "../controllers/user.controller.js";
 
 const router = express.Router();
@@ -12,6 +13,8 @@ const router = express.Router();
 router.get("/profile/:username", getUserProfile);
 router.get("/suggestions", protectRoute, getSuggestedConnections);
 router.get("/:username", protectRoute, getPublicProfile);
+
+router.get("/", protectRoute, getUsersForSidebar);
 
 router.put("/profile", protectRoute, updateProfile);
 

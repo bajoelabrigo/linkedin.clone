@@ -2,6 +2,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axios";
 import { Link } from "react-router-dom";
 import { Bell, Home, LogOut, MessageSquare, User, Users } from "lucide-react";
+import useConversation from "../../zustand/useConversation";
+import { set } from "mongoose";
 
 const Navbar = () => {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
@@ -25,6 +27,13 @@ const Navbar = () => {
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
   });
+
+  const {
+    messages,
+    
+  } = useConversation();
+
+  const messagesLength = messages?.filter((message) => !message.read).length;
 
   const unreadNotificationCount = notifications?.data.filter(
     (notif) => !notif.read
@@ -77,8 +86,8 @@ const Navbar = () => {
                   <span className="text-xs hidden md:block">Notifications</span>
                   {unreadNotificationCount > 0 && (
                     <span
-                      className="absolute -top-1 -right-1 md:right-4 bg-blue-500 text-white text-xs 
-										rounded-full size-3 md:size-4 flex items-center justify-center"
+                      className="absolute -top-2 -right-1 md:right-4 bg-blue-500 text-white text-xs 
+										rounded-full size-4 md:size-4 flex items-center justify-center"
                     >
                       {unreadNotificationCount}
                     </span>
@@ -89,20 +98,18 @@ const Navbar = () => {
                   className="text-neutral flex flex-col items-center relative"
                 >
                   <MessageSquare size={20} />
-                  <span className="text-xs hidden md:block">Messages</span>
-                  {unreadNotificationCount > 0 && (
+                  <span className="text-sm hidden md:block">Messages</span>
+                  {messagesLength > 0 && (
                     <span
-                      className="absolute -top-1 -right-1 md:right-4 bg-blue-500 text-white text-xs 
-										rounded-full size-3 md:size-4 flex items-center justify-center"
+                      className="absolute -top-2 -right-1 md:right-4 bg-blue-500 text-white text-xs 
+										rounded-full size-4 md:size-4 flex items-center justify-center"
                     >
-                      {unreadNotificationCount}
+                      {messagesLength}
                     </span>
                   )}
                 </Link>
-                
-                
+
                 <Link
-                
                   to={`/profile/${authUser.username}`}
                   className="text-neutral flex flex-col items-center"
                 >

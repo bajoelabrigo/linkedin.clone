@@ -4,7 +4,11 @@ import daisyui from "daisyui";
 export default {
 	content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
 	theme: {
-		extend: {},
+		extend: {
+			backgroundImage: {
+				"my-image": "url(/bg-2.jpg)",
+			}
+		},
 	},
 	plugins: [daisyui],
 	daisyui: {
