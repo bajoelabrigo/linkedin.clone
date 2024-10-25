@@ -1,5 +1,4 @@
 import express from "express";
-import path from "path";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -14,7 +13,7 @@ import messageRoutes from "./routes/message.route.js";
 import { connectDB } from "./lib/db.js";
 import {app, server} from "./socket/socket.js";
 
-dotenv.config();
+dotenv.config(); //Crear variables de entorno
 
 const PORT = process.env.PORT || 5000;
 
@@ -25,9 +24,10 @@ app.use(
   })
 );
 
-app.use(express.json({ limit: "5mb" })); // parse JSON request bodies
+app.use(express.json({ limit: "5mb" })); // Es para tomar las respuestas del body req.body
 app.use(cookieParser());
 
+//Crear rutas principales
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/posts", postRoutes);

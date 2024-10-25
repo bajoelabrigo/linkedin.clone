@@ -29,6 +29,7 @@ function App() {
     },
   });
 
+
   if (isLoading) return null; //para que no demore el spiner y cargue rapido al "/"
 
   return (
