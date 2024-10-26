@@ -2,7 +2,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { axiosInstance } from "../../lib/axios";
 import toast from "react-hot-toast";
-import { Loader } from "lucide-react";
+import { Loader, Lock, UserPlus } from "lucide-react";
+import Input from "./Input";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -36,7 +39,8 @@ const LoginForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
-      <input
+      <Input
+        icon={UserPlus}
         type="text"
         placeholder="Username"
         value={username}
@@ -44,7 +48,8 @@ const LoginForm = () => {
         className="input input-bordered w-full"
         required
       />
-      <input
+      <Input
+        icon={Lock}
         type="password"
         placeholder="Password"
         value={password}
@@ -53,9 +58,23 @@ const LoginForm = () => {
         required
       />
 
-      <button type="submit" className="btn btn-primary w-full">
+      <div className="flex items-center mb-6">
+        <Link
+          to="/forgot-password"
+          className="text-sm text-primary hover:underline"
+        >
+          Forgot password?
+        </Link>
+      </div>
+
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        type="submit"
+        className="btn btn-primary w-full"
+      >
         {isLoading ? <Loader className="size-5 animate-spin" /> : "Login"}
-      </button>
+      </motion.button>
     </form>
   );
 };

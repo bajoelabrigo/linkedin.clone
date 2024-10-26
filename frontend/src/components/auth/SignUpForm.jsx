@@ -2,7 +2,10 @@ import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { axiosInstance } from "../../lib/axios";
-import {Loader} from "lucide-react"
+import { Loader, Lock, Mail, User, UserPlus } from "lucide-react";
+import Input from "./Input";
+import { motion } from "framer-motion";
+
 const SignUpForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,26 +15,27 @@ const SignUpForm = () => {
 
   const { mutate: signUpMutation, isLoading } = useMutation({
     mutationFn: async (data) => {
-        const res = await axiosInstance.post("/auth/signup", data);
-        return res.data;
+      const res = await axiosInstance.post("/auth/signup", data);
+      return res.data;
     },
     onSuccess: () => {
-        toast.success("Account created successfully");
-        queryClient.invalidateQueries({ queryKey: ["authUser"] });
+      toast.success("Account created successfully");
+      queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
     onError: (err) => {
-        toast.error(err.response.data.message || "Something went wrong");
+      toast.error(err.response.data.message || "Something went wrong");
     },
-});
+  });
 
-const handleSignUp = (e) => {
+  const handleSignUp = (e) => {
     e.preventDefault();
     signUpMutation({ name, username, email, password });
-};
+  };
 
   return (
     <form onSubmit={handleSignUp} className="flex flex-col gap-4">
-      <input
+      <Input
+        icon={User}
         type="text"
         placeholder="Full name"
         value={name}
@@ -39,7 +43,8 @@ const handleSignUp = (e) => {
         className="input input-bordered w-full"
         required
       />
-      <input
+      <Input
+        icon={UserPlus}
         type="text"
         placeholder="Username"
         value={username}
@@ -47,15 +52,17 @@ const handleSignUp = (e) => {
         className="input input-bordered w-full"
         required
       />
-      <input
+      <Input
+        icon={Mail}
         type="email"
-        placeholder="Email"
+        placeholder="Email Adrress"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="input input-bordered w-full"
         required
       />
-      <input
+      <Input
+        icon={Lock}
         type="password"
         placeholder="Password (6+ characters)"
         value={password}
@@ -64,7 +71,9 @@ const handleSignUp = (e) => {
         required
       />
 
-      <button
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         type="submit"
         disabled={isLoading}
         className="btn btn-primary w-full text-white"
@@ -74,7 +83,7 @@ const handleSignUp = (e) => {
         ) : (
           "Agree & Join"
         )}
-      </button>
+      </motion.button>
     </form>
   );
 };

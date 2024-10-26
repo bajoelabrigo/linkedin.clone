@@ -11,6 +11,8 @@ import NetworkPage from "./pages/NetworkPage";
 import PostPage from "./pages/PostPage";
 import ProfilePage from "./pages/ProfilePage";
 import ChatPage from "./pages/ChatPage";
+import ForgotPasswordPage from "./components/auth/ForgotPasswordPage";
+import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -18,7 +20,6 @@ function App() {
     queryFn: async () => {
       try {
         const res = await axiosInstance.get("/auth/me");
-
         return res.data;
       } catch (err) {
         if (err.response && err.response.status === 401) {
@@ -28,7 +29,6 @@ function App() {
       }
     },
   });
-
 
   if (isLoading) return null; //para que no demore el spiner y cargue rapido al "/"
 
@@ -68,6 +68,18 @@ function App() {
         <Route
           path="/chat"
           element={authUser ? <ChatPage /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            !authUser ? <ForgotPasswordPage /> : <Navigate to={"/login"} />
+          }
+        />
+        <Route
+          path="/reset-password/:token"
+          element={
+            !authUser ? <ResetPasswordPage /> : <Navigate to={"/login"} />
+          }
         />
       </Routes>
       <Toaster />

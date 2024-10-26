@@ -9,7 +9,7 @@ const Message = ({ message }) => {
   const formattedTime = extractTime(message.createdAt);
   const chatClassName = fromMe ? "chat chat-end" : "chat chat-start";
   const profilePic = fromMe
-    ? authUser.profilePicture
+    ? authUser.profilePicture || "/avatar.png"
     : selectedConversation?.profilePicture || "/avatar.png";
 
   const bubbleBgColor = fromMe ? "bg-blue-500" : "bg-purple-500";
