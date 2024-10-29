@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Bell, Home, LogOut, MessageSquare, User, Users } from "lucide-react";
 import useConversation from "../../zustand/useConversation";
 import { set } from "mongoose";
+import ThemeController from "../Theme/ThemeController";
 
 const Navbar = () => {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
@@ -28,10 +29,7 @@ const Navbar = () => {
     },
   });
 
-  const {
-    messages,
-    
-  } = useConversation();
+  const { messages } = useConversation();
 
   const messagesLength = messages?.filter((message) => !message.read).length;
 

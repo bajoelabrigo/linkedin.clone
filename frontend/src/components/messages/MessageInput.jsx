@@ -1,4 +1,3 @@
-import { BsSend } from "react-icons/bs";
 import useSendMessage from "../../hooks/useSendMessage";
 import { useState, useRef, useEffect } from "react";
 import { Send, Smile } from "lucide-react";

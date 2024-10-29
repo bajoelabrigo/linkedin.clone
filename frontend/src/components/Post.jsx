@@ -14,6 +14,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 
 import PostAction from "./PostAction";
+import parser from "html-react-parser";
 
 const Post = ({ post }) => {
   const { postId } = useParams();
@@ -133,7 +134,7 @@ const Post = ({ post }) => {
             </button>
           )}
         </div>
-        <p className="mb-4">{post.content}</p>
+        <p className=" ProseMirror">{parser(post.content)}</p>
         {post.image && (
           <img
             src={post.image}
