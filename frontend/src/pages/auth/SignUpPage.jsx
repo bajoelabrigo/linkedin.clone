@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import SignUpForm from "../../components/auth/SignUpForm";
 import { motion } from "framer-motion";
+import OAuth from "@/components/auth/OAuth";
 
 const SignUpPage = () => {
   return (
@@ -19,6 +20,7 @@ const SignUpPage = () => {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md shadow-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <SignUpForm />
+          <OAuth />
 
           <div className="mt-6">
             <div className="relative">

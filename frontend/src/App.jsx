@@ -13,6 +13,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ChatPage from "./pages/ChatPage";
 import ForgotPasswordPage from "./components/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
+import OAuth from "./components/auth/OAuth";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
@@ -47,6 +48,11 @@ function App() {
           path="/login"
           element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
         />
+         <Route
+          path="/google"
+          element={!authUser ? <OAuth /> : <Navigate to={"/"} />}
+        />
+        
         <Route
           path="/notifications"
           element={

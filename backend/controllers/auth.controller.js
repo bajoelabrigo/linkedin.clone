@@ -166,3 +166,54 @@ export const resetPassword = async (req, res) => {
 		res.status(400).json({ success: false, message: error.message });
 	}
 };
+
+export const google = async (req, res, next) => {
+	const { email, name, googlePhotoUrl } = req.body;
+	try {
+	  const user = await User.findOne({ email });
+	  if (user) {
+		const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "3d" });
+		await res.cookie("jwt-linkedin", token, {
+			httpOnly: true,
+			maxAge: 3 * 24 * 60 * 60 * 1000,
+			sameSite: "strict",
+			secure: process.env.NODE_ENV === "production",
+		});
+		const { password, ...rest } = user._doc;
+		res
+		  .status(200)
+		  .cookie("access_token", token, {
+			httpOnly: true,
+		  })
+		  .json(rest);
+	  } else {
+		const generatedPassword =
+		  Math.random().toString(36).slice(-8) +
+		  Math.random().toString(36).slice(-8);
+		const hashedPassword = bcryptjs.hashSync(generatedPassword, 10);
+		const newUser = new User({
+		  username:
+			name.toLowerCase().split(" ").join("") +
+			Math.random().toString(9).slice(-4),
+		  email,
+		  password: hashedPassword,
+		  profilePicture: googlePhotoUrl,
+		});
+		await newUser.save();
+		const token = jwt.sign(
+		  { id: newUser._id, isAdmin: newUser.isAdmin },
+		  process.env.JWT_SECRET
+		);
+		const { password, ...rest } = newUser._doc;
+		res
+		  .status(200)
+		  .cookie("access_token", token, {
+			httpOnly: true,
+		  })
+		  .json(rest);
+	  }
+	} catch (error) {
+	  next(error);
+	}
+  };
+  

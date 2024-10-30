@@ -3,7 +3,7 @@ import { useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { Image, Loader } from "lucide-react";
-import Tiptap from "./Tiptap/Tiptap";
+import RichTextEditor from "./RichTextEditor";
 
 const PostCreation = ({ user }) => {
   const [content, setContent] = useState("");
@@ -73,7 +73,7 @@ const PostCreation = ({ user }) => {
           alt={user.name}
           className="size-12 rounded-full object-cover overflow-hidden"
         />
-        <Tiptap setDescription={setContent} />
+        <RichTextEditor setDescription={setContent} />
       </div>
 
       {imagePreview && (
