@@ -179,10 +179,12 @@ export const google = async (req, res, next) => {
 			sameSite: "strict",
 			secure: process.env.NODE_ENV === "production",
 		});
+		
 		const { password, ...rest } = user._doc;
+		await user.save();
 		res
 		  .status(200)
-		  .cookie("access_token", token, {
+		  .cookie("jwt-linkedin", token, {
 			httpOnly: true,
 		  })
 		  .json(rest);
@@ -207,7 +209,7 @@ export const google = async (req, res, next) => {
 		const { password, ...rest } = newUser._doc;
 		res
 		  .status(200)
-		  .cookie("access_token", token, {
+		  .cookie("jwt-linkedin", token, {
 			httpOnly: true,
 		  })
 		  .json(rest);

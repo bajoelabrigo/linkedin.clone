@@ -15,7 +15,7 @@ import ForgotPasswordPage from "./components/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 import OAuth from "./components/auth/OAuth";
 
-function App() {
+export default function App() {
   const { data: authUser, isLoading } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
@@ -93,4 +93,4 @@ function App() {
   );
 }
 
-export default App;
+

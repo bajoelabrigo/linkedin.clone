@@ -14,8 +14,8 @@ const router = express.Router();
 
 router.post("/signup", signup);
 router.post("/login", login);
-router.post("/logout", logout);
 router.post("/google", google)
+router.post("/logout", logout);
 
 
 router.post("/forgot-password", forgotPassword)

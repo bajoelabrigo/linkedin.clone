@@ -7,6 +7,7 @@ import {
   getPostById,
   createComment,
   likePost,
+ 
 } from "../controllers/post.controller.js";
 
 const router = express.Router();
