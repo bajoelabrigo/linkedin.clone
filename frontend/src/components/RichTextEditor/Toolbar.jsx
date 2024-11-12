@@ -99,7 +99,7 @@ const Toolbar = ({ editor }) => {
     },
   ];
   return (
-    <div className="p-1.5 mb-1  space-x-1 sticky top-0 z-50">
+    <div className="p-1.5 mb-1  space-x-1 flex-wrap top-0 z-50">
       {Options.map((option, i) => (
         <Toggle
           key={i}

@@ -3,9 +3,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import SignUpPage from "./pages/auth/SignUpPage";
 import LoginPage from "./pages/auth/LoginPage";
-import toast, { Toaster } from "react-hot-toast";
-import { useQuery } from "@tanstack/react-query";
-import { axiosInstance } from "./lib/axios";
 import NotificationsPage from "./pages/NotificationPage";
 import NetworkPage from "./pages/NetworkPage";
 import PostPage from "./pages/PostPage";
@@ -14,22 +11,11 @@ import ChatPage from "./pages/ChatPage";
 import ForgotPasswordPage from "./components/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./components/auth/ResetPasswordPage";
 import OAuth from "./components/auth/OAuth";
+import { useAuthUser } from "./hooks/useQuery/useAuthQuery";
+import { Toaster } from "react-hot-toast";
 
 export default function App() {
-  const { data: authUser, isLoading } = useQuery({
-    queryKey: ["authUser"],
-    queryFn: async () => {
-      try {
-        const res = await axiosInstance.get("/auth/me");
-        return res.data;
-      } catch (err) {
-        if (err.response && err.response.status === 401) {
-          return null;
-        }
-        toast.error(err.response.data.message || "Something went wrong");
-      }
-    },
-  });
+  const { authUser, isLoading } = useAuthUser();
 
   if (isLoading) return null; //para que no demore el spiner y cargue rapido al "/"
 
@@ -48,11 +34,11 @@ export default function App() {
           path="/login"
           element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
         />
-         <Route
+        <Route
           path="/google"
           element={!authUser ? <OAuth /> : <Navigate to={"/"} />}
         />
-        
+
         <Route
           path="/notifications"
           element={
@@ -92,5 +78,3 @@ export default function App() {
     </Layout>
   );
 }
-
-

@@ -19,7 +19,7 @@ export const getFeedPosts = async (req, res) => {
   }
 };
 
-export const createPost = async (req, res) => {
+export const createPost =  async (req, res) => {
   try {
     const { content, image } = req.body;
     let newPost;

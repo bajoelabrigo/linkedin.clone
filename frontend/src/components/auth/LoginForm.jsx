@@ -1,36 +1,15 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { axiosInstance } from "../../lib/axios";
-import toast from "react-hot-toast";
 import { Loader, Lock, UserPlus } from "lucide-react";
 import Input from "./Input";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { useLogin } from "@/hooks/useMutation/useAuthMutation";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const queryClient = useQueryClient();
 
-  const { mutate: loginMutation, isLoading } = useMutation({
-    mutationFn: async (userData) => {
-      try {
-        const res = await axiosInstance.post("auth/login", userData);
-        return res.data;
-      } catch (err) {
-        if (err.response && err.response.status === 401) {
-          return null;
-        }
-        toast.error(err.response.data.message || "Something went wrong");
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-    onError: (err) => {
-      toast.error(err.response.data.message || "Something went wrong");
-    },
-  });
+  const { loginMutation, isLoading } = useLogin();
 
   const handleSubmit = (e) => {
     e.preventDefault();

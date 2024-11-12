@@ -1,33 +1,15 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { axiosInstance } from "../../lib/axios";
 import { Link } from "react-router-dom";
-import { Bell, Home, LogOut, MessageSquare, User, Users } from "lucide-react";
+import { Bell, Home, LogOut, MessageSquare, Search, User, Users } from "lucide-react";
 import useConversation from "../../zustand/useConversation";
-import { set } from "mongoose";
-import ThemeController from "../Theme/ThemeController";
+import { useAuthUser } from "@/hooks/useQuery/useAuthQuery";
+import { useNotifications } from "@/hooks/useQuery/useNavbar";
+import { useLogout } from "@/hooks/useMutation/useAuthMutation";
 
 const Navbar = () => {
-  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
-  const queryClient = useQueryClient();
+  const { authUser } = useAuthUser();
 
-  const { data: notifications } = useQuery({
-    queryKey: ["notifications"],
-    queryFn: async () => axiosInstance.get("/notifications"),
-    enabled: !!authUser,
-  });
-
-  const { data: connectionRequests } = useQuery({
-    queryKey: ["connectionRequests"],
-    queryFn: async () => axiosInstance.get("/connections/requests"),
-    enabled: !!authUser,
-  });
-
-  const { mutate: logout } = useMutation({
-    mutationFn: () => axiosInstance.post("/auth/logout"),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["authUser"] });
-    },
-  });
+  const { notifications, connectionRequests } = useNotifications();
+  const { logout } = useLogout();
 
   const { messages } = useConversation();
 
@@ -50,7 +32,13 @@ const Navbar = () => {
                 alt="LinkedIn"
               />
             </Link>
+
+            <label className="input input-bordered  w-full items-center gap-2 hidden md:flex ">
+              <input type="text" className="grow" placeholder="Search..." />
+              <Search size={18}/>
+            </label>
           </div>
+
           <div className="flex items-center gap-2 md:gap-6">
             {authUser ? (
               <>

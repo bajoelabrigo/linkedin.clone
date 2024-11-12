@@ -2,8 +2,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import { Image, Loader } from "lucide-react";
+import {
+  FileAudio,
+  FileText,
+  FileVideo,
+  Image,
+  Loader,
+  SquarePlus,
+} from "lucide-react";
 import RichTextEditor from "./RichTextEditor";
+import UploadFiles from "./UploadFiles";
 
 const PostCreation = ({ user }) => {
   const [content, setContent] = useState("");
@@ -98,6 +106,32 @@ const PostCreation = ({ user }) => {
               onChange={handleImageChange}
             />
           </label>
+
+          <button
+            onClick={() => document.getElementById("my_modal_4").showModal()}
+            className="flex items-center text-info hover:text-info-dark transition-colors duration-200 cursor-pointer "
+          >
+            <FileText size={20} className="mr-2 text-gray-600" />
+            <span className="mr-6">Documents</span>
+            <FileAudio size={20} className="mr-2 text-gray-600" />
+            <span className="mr-6">Audio</span>
+            <FileVideo size={20} className="mr-2 text-gray-600" />
+            <span>Video</span>
+          </button>
+
+          <dialog id="my_modal_4" className="modal">
+            <div className="modal-box w-11/12 max-w-5xl">
+              <UploadFiles />
+              <div className="modal-action">
+                <form method="dialog">
+                  {/* if there is a button, it will close the modal */}
+                  <button className="btn">Close</button>
+                </form>
+              </div>
+            </div>
+          </dialog>
+
+          
         </div>
 
         <button
