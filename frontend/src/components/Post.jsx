@@ -16,19 +16,7 @@ import { formatDistanceToNow } from "date-fns";
 import PostAction from "./PostAction";
 import parser from "html-react-parser";
 
-import { BASE_URL, useUpload } from "@/hooks/useUpload";
-import { FileDown } from "lucide-react";
-
 const Post = ({ post }) => {
-  const {
-    getRootProps,
-    getInputProps,
-    isDragActive,
-    file,
-    uploadPercentage,
-    onUpload,
-    allFiles,
-  } = useUpload();
   const { postId } = useParams();
 
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
@@ -108,6 +96,12 @@ const Post = ({ post }) => {
     }
   };
 
+  function extractTextFromHTML(html) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    return doc.body.textContent?.trim() || "";
+  }
+
   return (
     <div className="bg-secondary rounded-lg shadow mb-4">
       <div className="p-4">
@@ -147,8 +141,6 @@ const Post = ({ post }) => {
           )}
         </div>
         <p className=" ProseMirror">{parser(post.content || "")}</p>
-
-          
         {post.image && (
           <img
             src={post.image}

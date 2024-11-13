@@ -10,6 +10,14 @@ const postSchema = new mongoose.Schema(
 
     content: { type: String },
     image: { type: String },
+    file: {
+      type: String,
+      required: [true, "Please provide a file"],
+    },
+    filename: String,
+    mimetype: String,
+    filepath: String,
+
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     comments: [
       {

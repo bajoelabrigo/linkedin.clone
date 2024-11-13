@@ -111,11 +111,11 @@ const PostCreation = ({ user }) => {
             onClick={() => document.getElementById("my_modal_4").showModal()}
             className="flex items-center text-info hover:text-info-dark transition-colors duration-200 cursor-pointer "
           >
-            <FileText size={20} className="mr-2 text-gray-600" />
-            <span className="mr-6">Documents</span>
-            <FileAudio size={20} className="mr-2 text-gray-600" />
+            <FileText size={24} className="mr-2 text-gray-500" />
+            <span className="mr-6">Pdf ó Doc</span>
+            <FileAudio size={24} className="mr-2 text-gray-500" />
             <span className="mr-6">Audio</span>
-            <FileVideo size={20} className="mr-2 text-gray-600" />
+            <FileVideo size={24} className="mr-2 text-gray-500" />
             <span>Video</span>
           </button>
 
@@ -130,8 +130,6 @@ const PostCreation = ({ user }) => {
               </div>
             </div>
           </dialog>
-
-          
         </div>
 
         <button

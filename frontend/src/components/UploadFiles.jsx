@@ -41,7 +41,7 @@ const UploadFiles = () => {
       {uploadPercentage > 0 && <Progress value={uploadPercentage} />}
 
       <Button size="lg" onClick={onUpload} className="text-xl">
-        <Download className="h-8 w-8 text-green-400" /> Upload
+        <Download  className="h-8 w-8 text-green-400" /> Upload
       </Button>
 
       {file && (
@@ -62,6 +62,8 @@ const UploadFiles = () => {
       )}
 
       <div>
+        <h1>All Uploaded Files</h1>
+
         {allFiles.map((file) => (
           <div className="p-2" key={file._id}>
             {file.path.includes("png" | "jpg" | "jpeg" | "svg" | "webp") ? (
