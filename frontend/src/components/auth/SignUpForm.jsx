@@ -1,59 +1,63 @@
-import { useState } from "react";
 import { Loader, Lock, Mail, User, UserPlus } from "lucide-react";
 import Input from "./Input";
 import { motion } from "framer-motion";
 import { useSignup } from "@/hooks/useMutation/useAuthMutation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signUpSchema } from "@/utils/validation";
 
 const SignUpForm = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(signUpSchema),
+  });
 
   const { signUpMutation, isLoading } = useSignup();
 
-  const handleSignUp = (e) => {
-    e.preventDefault();
-    signUpMutation({ name, username, email, password });
+  const handleSignUp = (data) => {
+    signUpMutation({ ...data });
   };
 
   return (
-    <form onSubmit={handleSignUp} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(handleSignUp)} className="flex flex-col gap-4">
       <Input
         icon={User}
+        name="name"
+        register={register}
+        error={errors?.name?.message}
         type="text"
         placeholder="Full name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
         className="input input-bordered w-full"
-        required
       />
       <Input
         icon={UserPlus}
+        name="username"
+        register={register}
+        error={errors?.username?.message}
         type="text"
         placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
         className="input input-bordered w-full"
-        required
       />
       <Input
         icon={Mail}
+        name="email"
+        register={register}
+        error={errors?.email?.message}
         type="email"
         placeholder="Email Adrress"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
         className="input input-bordered w-full"
-        required
       />
       <Input
         icon={Lock}
+        name="password"
+        register={register}
+        error={errors?.password?.message}
         type="password"
         placeholder="Password (6+ characters)"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
         className="input input-bordered w-full"
-        required
       />
 
       <motion.button

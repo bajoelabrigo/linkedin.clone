@@ -1,40 +1,49 @@
-import { useState } from "react";
-import { Loader, Lock, UserPlus } from "lucide-react";
+import { Loader, Lock, Mail } from "lucide-react";
 import Input from "./Input";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { useLogin } from "@/hooks/useMutation/useAuthMutation";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { signInSchema } from "@/utils/validation";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(signInSchema),
+  });
 
   const { loginMutation, isLoading } = useLogin();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    loginMutation({ username, password });
+  const onSubmit = (data) => {
+    loginMutation({ ...data });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4 w-full max-w-md"
+    >
       <Input
-        icon={UserPlus}
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        icon={Mail}
+        name="email"
+        register={register}
+        error={errors?.email?.message}
+        type="email"
+        placeholder="Email Adrress"
         className="input input-bordered w-full"
-        required
       />
       <Input
         icon={Lock}
+        name="password"
+        register={register}
+        error={errors?.password?.message}
         type="password"
         placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
         className="input input-bordered w-full"
-        required
       />
 
       <div className="flex items-center mb-6">

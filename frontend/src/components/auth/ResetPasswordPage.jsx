@@ -53,24 +53,35 @@ const ResetPasswordPage = () => {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
-              <Input
-                icon={Lock}
-                type="password"
-                placeholder="New Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="flex px-2 items-center gap-x-2">
+                <div className="w-full input flex rounded-lg pl-2 space-x-2">
+                  <span className="w-8 flex items-center justify-center cursor-pointer">
+                    <Lock />
+                  </span>
+                  <input
+                    type="password"
+                    placeholder="New Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
             </div>
             <div className="mb-4">
-              <Input
-                icon={Lock}
-                type="password"
-                placeholder="Confirm New Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
+              <div className="flex px-2 items-center gap-x-2">
+                <div className="w-full input flex rounded-lg pl-2 space-x-2">
+                  <span className="w-8 flex items-center justify-center cursor-pointer">
+                    <Lock />
+                  </span>
+                  <input
+                    placeholder="Confirm New Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
             </div>
 
             <motion.button

@@ -3,7 +3,6 @@ import { useState } from "react";
 import { ArrowLeft, Loader, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../../zustand/authStore";
-import Input from "./Input";
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");
@@ -36,14 +35,21 @@ const ForgotPasswordPage = () => {
                 Enter your email address and we'll send you a link to reset your
                 password.
               </p>
-              <Input
-                icon={Mail}
-                type="email"
-                placeholder="Email Address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
+
+              <div className="flex px-2 items-center gap-x-2">
+                <div className="w-full input flex rounded-lg pl-2 space-x-2">
+                  <span className="w-8 flex items-center justify-center cursor-pointer">
+                    <Mail />
+                  </span>
+                  <input
+                    className=""
+                    type="email"
+                    placeholder="Email Address..."
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
+              </div>
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}

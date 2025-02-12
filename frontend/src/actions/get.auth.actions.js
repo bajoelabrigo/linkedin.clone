@@ -1,4 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
+import { toast } from "react-hot-toast";
 
 export const getSignupActions = async (data) => {
   const res = await axiosInstance.post("/auth/signup", data);

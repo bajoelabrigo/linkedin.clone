@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import SignUpForm from "../../components/auth/SignUpForm";
 import { motion } from "framer-motion";
-import OAuth from "@/components/auth/OAuth";
+
 
 const SignUpPage = () => {
+ 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

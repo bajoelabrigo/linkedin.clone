@@ -2,21 +2,14 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import {
-  FileAudio,
-  FileText,
-  FileVideo,
-  Image,
-  Loader,
-  SquarePlus,
-} from "lucide-react";
+import { FileAudio, FileText, FileVideo, Image, Loader } from "lucide-react";
 import RichTextEditor from "./RichTextEditor";
-import UploadFiles from "./UploadFiles";
 
 const PostCreation = ({ user }) => {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [file, setFile] = useState(null);
 
   const queryClient = useQueryClient();
 
@@ -39,7 +32,7 @@ const PostCreation = ({ user }) => {
 
   const handlePostCreation = async () => {
     try {
-      const postData = { content };
+      const postData = { content, file };
       if (image) postData.image = await readFileAsDataURL(image);
 
       createPostMutation(postData);
@@ -56,11 +49,25 @@ const PostCreation = ({ user }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setImage(file);
-    if (file) {
-      readFileAsDataURL(file).then(setImagePreview);
+    if (
+      file.type !== "image/jpeg" &&
+      file.type !== "image/png" &&
+      file.type !== "image/gif" &&
+      file.type !== "image/jpg" &&
+      file.type !== "image/webp"
+    ) {
+      toast.error("Only JPEG, PNG, and GIF images are allowed.");
+      return;
+    } else if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image size should be less than 5MB.");
+      return;
     } else {
-      setImagePreview(null);
+      setImage(file);
+      if (file) {
+        readFileAsDataURL(file).then(setImagePreview);
+      } else {
+        setImagePreview(null);
+      }
     }
   };
 
@@ -73,15 +80,23 @@ const PostCreation = ({ user }) => {
     });
   };
 
+  const handleChandePic = (e) => {
+    setFile("");
+    setImage(null);
+    setImagePreview(null);
+  };
+
   return (
     <div className="bg-secondary rounded-lg shadow mb-4 p-4">
       <div className="flex space-x-3">
         <img
           src={user.profilePicture || "/avatar.png"}
           alt={user.name}
-          className="size-12 rounded-full object-cover overflow-hidden"
+          className="size-12 rounded-full object-cover"
         />
-        <RichTextEditor setDescription={setContent} />
+        <div>
+          <RichTextEditor setDescription={setContent} />
+        </div>
       </div>
 
       {imagePreview && (
@@ -91,6 +106,12 @@ const PostCreation = ({ user }) => {
             alt="Selected"
             className="w-full h-auto rounded-lg"
           />
+          <div
+            onClick={handleChandePic}
+            className="rounded-md text-xs flex items-center justify-center cursor-pointer bg-red-500 text-white px-2 py-2 mt-2"
+          >
+            Remove
+          </div>
         </div>
       )}
 
@@ -106,30 +127,6 @@ const PostCreation = ({ user }) => {
               onChange={handleImageChange}
             />
           </label>
-
-          <button
-            onClick={() => document.getElementById("my_modal_4").showModal()}
-            className="flex items-center text-info hover:text-info-dark transition-colors duration-200 cursor-pointer "
-          >
-            <FileText size={24} className="mr-2 text-gray-500" />
-            <span className="mr-6">Pdf ó Doc</span>
-            <FileAudio size={24} className="mr-2 text-gray-500" />
-            <span className="mr-6">Audio</span>
-            <FileVideo size={24} className="mr-2 text-gray-500" />
-            <span>Video</span>
-          </button>
-
-          <dialog id="my_modal_4" className="modal">
-            <div className="modal-box w-11/12 max-w-5xl">
-              <UploadFiles />
-              <div className="modal-action">
-                <form method="dialog">
-                  {/* if there is a button, it will close the modal */}
-                  <button className="btn">Close</button>
-                </form>
-              </div>
-            </div>
-          </dialog>
         </div>
 
         <button

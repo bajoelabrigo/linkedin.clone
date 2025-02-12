@@ -2,10 +2,6 @@ import cloudinary from "../lib/cloudinary.js";
 import Post from "../models/post.model.js";
 import Notification from "../models/notification.model.js";
 import { sendCommentNotificationEmail } from "../emails/emailHandlers.js";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const getFeedPosts = async (req, res) => {
   try {
@@ -23,13 +19,9 @@ export const getFeedPosts = async (req, res) => {
   }
 };
 
-export const createPost =  async (req, res) => {
+export const createPost = async (req, res) => {
   try {
-    const { content, image,  } = req.body;
-    const file = req.file.path;
-    const fileName = req.file.originalname;
-    const filePath = path.join(__dirname, `../${file}`);
-    const mimeType = req.file.mimetype;
+    const { content, image } = req.body;
 
     let newPost;
 
@@ -39,19 +31,11 @@ export const createPost =  async (req, res) => {
         author: req.user._id,
         content,
         image: imgResult.secure_url,
-        file,
-        filename: fileName,
-        mimetype: mimeType,
-        filepath: filePath,
       });
     } else {
       newPost = new Post({
         author: req.user._id,
         content,
-        file,
-        filename: fileName,
-        mimetype: mimeType,
-        filepath: filePath,
       });
     }
 
