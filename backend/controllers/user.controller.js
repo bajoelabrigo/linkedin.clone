@@ -8,8 +8,8 @@ export const getSuggestedConnections = async (req, res) => {
     // find users who are not already connected, and also do not recommend our own profile!! right?
     const suggestedUser = await User.find({
       _id: {
-        $ne: req.user._id,
-        $nin: currentUser.connections,
+        $ne: req.user._id, //$ne=no equal
+        $nin: currentUser.connections, //$nin no include
       },
     })
       .select("name username profilePicture headline")

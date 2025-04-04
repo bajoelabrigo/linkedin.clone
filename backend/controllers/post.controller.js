@@ -92,9 +92,6 @@ export const getPostById = async (req, res) => {
     if (!post) {
       return res.status(404).json({ message: "Post not found" });
     }
-    const file = item.file;
-    const filePath = path.join(__dirname, `../${file}`);
-    res.download(filePath);
 
     res.status(200).json(post);
   } catch (error) {
